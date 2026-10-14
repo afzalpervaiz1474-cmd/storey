@@ -1,0 +1,9 @@
+<article class="product-card" data-motion-card>
+  <a class="product-photo" href="{{ product.url }}">
+    {% if product.featured_image %}{{ product.featured_image | image_url: width: 800 | image_tag: widths: '300, 450, 600, 800', sizes: '(min-width: 1001px) 25vw, (min-width: 701px) 33vw, 50vw', loading: 'lazy', alt: product.featured_image.alt | default: product.title }}{% endif %}
+    {% if product.type != blank %}<span class="product-label">{{ product.type | escape }}</span>{% endif %}<span class="photo-arrow" aria-hidden="true">↗</span>
+  </a>
+  <div class="product-info"><a class="product-title" href="{{ product.url }}">{{ product.title | escape }}</a><div class="product-bottom"><span>{% if product.price_varies %}From {% endif %}{{ product.price_min | money }}</span>
+    {% if product.available %}{% assign card_variant = product.selected_or_first_available_variant %}<form method="post" action="{{ routes.cart_add_url }}" class="quick-add-form"><input type="hidden" name="id" value="{{ card_variant.id }}"><input type="hidden" name="quantity" value="1"><button class="button button-secondary" type="submit">＋ Add</button></form>{% else %}<span class="sold-out">Sold out</span>{% endif %}
+  </div></div>
+</article>

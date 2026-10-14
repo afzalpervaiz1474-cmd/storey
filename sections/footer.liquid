@@ -1,0 +1,35 @@
+<section class="benefits-band" data-motion-section>
+  <div class="container benefits" data-motion-grid>
+    {% for block in section.blocks %}
+      <div data-motion-card {{ block.shopify_attributes }}><span class="benefit-mark">{{ block.settings.mark | escape }}</span><span><strong>{{ block.settings.title | escape }}</strong><small>{{ block.settings.copy | escape }}</small></span></div>
+    {% endfor %}
+  </div>
+</section>
+<footer class="footer container">
+  <div class="footer-grid">
+    <div><a class="brand" href="{{ routes.root_url }}">{{ section.settings.brand_name | escape }}<span class="brand-dot">.</span></a><p>{{ section.settings.tagline | escape }}</p></div>
+    <div><h2>{{ section.settings.explore_heading | escape }}</h2>{% for link in section.settings.explore_menu.links %}<a href="{{ link.url }}">{{ link.title | escape }}</a>{% endfor %}</div>
+    <div><h2>{{ section.settings.support_heading | escape }}</h2>{% for link in section.settings.support_menu.links %}<a href="{{ link.url }}">{{ link.title | escape }}</a>{% endfor %}</div>
+    <div><h2>{{ section.settings.newsletter_heading | escape }}</h2><p>{{ section.settings.newsletter_copy | escape }}</p>{% form 'customer', class: 'newsletter-form' %}<input type="hidden" name="contact[tags]" value="newsletter"><label class="visually-hidden" for="NewsletterEmail">Email address</label><input id="NewsletterEmail" type="email" name="contact[email]" value="{{ form.email }}" placeholder="Email address" required><button type="submit">Subscribe</button>{% if form.posted_successfully? %}<p role="status">Thanks for subscribing.</p>{% endif %}{{ form.errors | default_errors }}{% endform %}</div>
+  </div>
+  <div class="footer-bottom"><span>© {{ 'now' | date: '%Y' }} {{ shop.name | escape }}. All rights reserved.</span><span>{{ section.settings.footer_note | escape }}</span><span>{% for type in shop.enabled_payment_types %}{{ type | payment_type_svg_tag }}{% endfor %}</span></div>
+</footer>
+{% schema %}
+{
+  "name": "Footer",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "brand_name", "label": "Brand name", "default": "Verdant" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Small upgrades. Extraordinary everyday." },
+    { "type": "text", "id": "explore_heading", "label": "Explore heading", "default": "Explore" },
+    { "type": "link_list", "id": "explore_menu", "label": "Explore menu" },
+    { "type": "text", "id": "support_heading", "label": "Support heading", "default": "Customer care" },
+    { "type": "link_list", "id": "support_menu", "label": "Support menu" },
+    { "type": "text", "id": "newsletter_heading", "label": "Newsletter heading", "default": "A better everyday" },
+    { "type": "text", "id": "newsletter_copy", "label": "Newsletter text", "default": "Get thoughtful finds and store updates in your inbox." },
+    { "type": "text", "id": "footer_note", "label": "Footer note", "default": "Considered essentials. Simply better." }
+  ],
+  "blocks": [{ "type": "benefit", "name": "Store benefit", "settings": [{ "type": "text", "id": "mark", "label": "Symbol", "default": "✳" }, { "type": "text", "id": "title", "label": "Title", "default": "Secure payment" }, { "type": "text", "id": "copy", "label": "Description", "default": "Protected by Shopify checkout" }] }],
+  "presets": [{ "name": "Footer", "blocks": [{ "type": "benefit", "settings": { "mark": "↗", "title": "Free delivery", "copy": "Delivery options at checkout" } }, { "type": "benefit", "settings": { "mark": "◇", "title": "Secure payment", "copy": "Protected by Shopify checkout" } }, { "type": "benefit", "settings": { "mark": "↺", "title": "Easy returns", "copy": "Contact us for return assistance" } }, { "type": "benefit", "settings": { "mark": "✳", "title": "Everyday, elevated", "copy": "Thoughtfully selected essentials" } }] }]
+}
+{% endschema %}

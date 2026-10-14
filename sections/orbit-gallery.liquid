@@ -1,0 +1,58 @@
+<section class="orbit-section" data-motion-section data-orbit-gallery>
+  <div class="orbit-inner container">
+    <div class="orbit-copy" data-motion-heading>
+      <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h2>{{ section.settings.heading | escape }}</h2>
+      <p>{{ section.settings.copy | escape }}</p>
+      <a class="button" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }} <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="orbit-stage" aria-label="Featured everyday essentials">
+      <div class="orbit-ring orbit-ring-outer" aria-hidden="true"></div>
+      <div class="orbit-ring orbit-ring-inner" aria-hidden="true"></div>
+      <span class="orbit-center-mark" aria-hidden="true">V</span>
+      {% for block in section.blocks %}
+        {% assign orbit_image = block.settings.image %}
+        {% unless orbit_image != blank %}
+          {% case forloop.index %}
+            {% when 1 %}{% assign orbit_fallback = 'photo-1523275335684-37898b6baf30' %}
+            {% when 2 %}{% assign orbit_fallback = 'photo-1547887538-e3a2f32cb1cc' %}
+            {% when 3 %}{% assign orbit_fallback = 'photo-1571781926291-c477ebfd024b' %}
+            {% else %}{% assign orbit_fallback = 'photo-1556911220-bff31c812dba' %}
+          {% endcase %}
+        {% endunless %}
+        <a class="orbit-card orbit-card-{{ forloop.index }}" href="{{ block.settings.link | default: routes.all_products_collection_url }}" data-orbit-card style="--orbit-index: {{ forloop.index0 }};" {{ block.shopify_attributes }}>
+          {% if orbit_image != blank %}
+            {{ orbit_image | image_url: width: 700 | image_tag: widths: '300, 450, 600, 700', sizes: '(min-width: 701px) 220px, 42vw', loading: 'lazy', alt: orbit_image.alt | default: block.settings.title }}
+          {% else %}
+            <img src="https://images.unsplash.com/{{ orbit_fallback }}?auto=format&amp;fit=crop&amp;w=700&amp;q=82" alt="{{ block.settings.title | escape }}" loading="lazy" width="700" height="875">
+          {% endif %}
+          <span class="orbit-card-caption"><strong>{{ block.settings.title | escape }}</strong><span aria-hidden="true">↗</span></span>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "3D product orbit",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "THE VERDANT EDIT" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Good things in motion." },
+    { "type": "textarea", "id": "copy", "label": "Description", "default": "A rotating edit of the details that make everyday feel a little more considered." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Explore the collection" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "blocks": [
+    { "type": "orbit_item", "name": "Orbit image", "settings": [ { "type": "image_picker", "id": "image", "label": "Image" }, { "type": "text", "id": "title", "label": "Image title", "default": "Everyday essentials" }, { "type": "url", "id": "link", "label": "Link" } ] }
+  ],
+  "presets": [
+    { "name": "3D product orbit", "blocks": [
+      { "type": "orbit_item", "settings": { "title": "Timeless details" } },
+      { "type": "orbit_item", "settings": { "title": "A signature scent" } },
+      { "type": "orbit_item", "settings": { "title": "Daily care" } },
+      { "type": "orbit_item", "settings": { "title": "Made for home" } }
+    ] }
+  ]
+}
+{% endschema %}

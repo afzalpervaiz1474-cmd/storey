@@ -1,0 +1,5 @@
+<section class="container catalog" data-motion-section><div class="section-heading"><div data-motion-heading><p class="eyebrow">SEARCH THE STORE</p><h1>Search results</h1></div></div>
+  <form action="{{ routes.search_url }}" method="get" role="search" class="catalog-search"><label class="visually-hidden" for="SearchQuery">Search products</label><input id="SearchQuery" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Find an essential…"><input type="hidden" name="type" value="product"><button class="button button-secondary" type="submit">Search</button></form>
+  {% if search.performed %}<p class="section-copy">{{ search.results_count }} results for “{{ search.terms | escape }}”</p><div class="product-grid" data-motion-grid>{% paginate search.results by 16 %}{% for item in search.results %}{% if item.object_type == 'product' %}{% render 'product-card', product: item %}{% endif %}{% else %}<p>No products found.</p>{% endfor %}{% if paginate.pages > 1 %}<nav class="pagination">{{ paginate | default_pagination }}</nav>{% endif %}{% endpaginate %}</div>{% endif %}
+</section>
+{% schema %}{"name":"Search results","settings":[]}{% endschema %}

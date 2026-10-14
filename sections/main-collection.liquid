@@ -1,0 +1,42 @@
+<section class="container catalog" data-motion-section>
+  <div class="section-heading"><div data-motion-heading><p class="eyebrow">{{ section.settings.eyebrow | escape }}</p><h1>{{ collection.title | escape }}</h1>{% if collection.description != blank %}<div class="section-copy">{{ collection.description }}</div>{% endif %}</div><span class="count-label">{{ collection.products_count }} products</span></div>
+  {% paginate collection.products by section.settings.products_per_page %}
+    <div class="catalog-layout">
+    <form class="catalog-toolbar catalog-filters" method="get" action="{{ collection.url }}" data-filter-form>
+      <div class="catalog-sort-row"><label class="sort-label" for="SortBy">Sort by <select id="SortBy" name="sort_by" data-sort-select>{% assign sort_by = collection.sort_by | default: collection.default_sort_by %}{% for option in collection.sort_options %}<option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name | escape }}</option>{% endfor %}</select></label></div>
+      {% if collection.filters != empty %}
+        <div class="filter-panel">
+          <div class="filter-panel-heading"><strong>Filter products</strong><a href="{{ collection.url }}">Clear all</a></div>
+          {% for filter in collection.filters %}
+            <details class="filter-group"{% if forloop.first %} open{% endif %}>
+              <summary>{{ filter.label | escape }}{% if filter.active_values.size > 0 %}<span>{{ filter.active_values.size }}</span>{% endif %}</summary>
+              {% case filter.type %}
+                {% when 'list' or 'boolean' %}
+                  <div class="filter-options">
+                    {% for filter_value in filter.values %}
+                      <label class="filter-option"><input type="checkbox" name="{{ filter_value.param_name }}" value="{{ filter_value.value }}"{% if filter_value.active %} checked{% endif %}{% if filter_value.count == 0 and filter_value.active == false %} disabled{% endif %}><span>{{ filter_value.label | escape }}</span><small>{{ filter_value.count }}</small></label>
+                    {% endfor %}
+                  </div>
+                {% when 'price_range' %}
+                  <div class="price-range-fields"><label>Min <span>{{ cart.currency.symbol }}</span><input name="{{ filter.min_value.param_name }}" type="number" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" value="{% if filter.min_value.value %}{{ filter.min_value.value | money_without_currency | replace: ',', '' }}{% endif %}" placeholder="0" inputmode="decimal"></label><label>Max <span>{{ cart.currency.symbol }}</span><input name="{{ filter.max_value.param_name }}" type="number" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" value="{% if filter.max_value.value %}{{ filter.max_value.value | money_without_currency | replace: ',', '' }}{% endif %}" placeholder="{{ filter.range_max | money_without_currency | replace: ',', '' }}" inputmode="decimal"></label></div>
+              {% endcase %}
+            </details>
+          {% endfor %}
+          <button class="button button-secondary filter-submit" type="submit">Apply filters</button>
+        </div>
+      {% endif %}
+      <noscript><button class="button button-secondary" type="submit">Update catalog</button></noscript>
+    </form>
+    <div class="catalog-results">
+      {% for filter in collection.filters %}
+        {% if filter.active_values.size > 0 or filter.min_value.value != blank or filter.max_value.value != blank %}
+          <div class="active-filters"><span>Active:</span>{% for filter_value in filter.active_values %}<a href="{{ filter_value.url_to_remove }}">{{ filter_value.label | escape }} ×</a>{% endfor %}{% if filter.type == 'price_range' %}<a href="{{ filter.url_to_remove }}">Price ×</a>{% endif %}<a class="active-filter-clear" href="{{ collection.url }}">Clear all</a></div>
+        {% endif %}
+      {% endfor %}
+    <div class="product-grid" data-motion-grid>{% for product in collection.products %}{% render 'product-card', product: product %}{% else %}<p>No products found in this collection.</p>{% endfor %}</div>
+    {% if paginate.pages > 1 %}<nav class="pagination" aria-label="Pagination">{% if paginate.previous %}<a href="{{ paginate.previous.url }}">← Previous</a>{% endif %}<span>Page {{ paginate.current_page }} of {{ paginate.pages }}</span>{% if paginate.next %}<a href="{{ paginate.next.url }}">Next →</a>{% endif %}</nav>{% endif %}
+    </div>
+    </div>
+  {% endpaginate %}
+</section>
+{% schema %}{"name":"Collection products","settings":[{"type":"text","id":"eyebrow","label":"Eyebrow","default":"THE EVERYDAY COLLECTION"},{"type":"range","id":"products_per_page","label":"Products per page","min":8,"max":32,"step":4,"default":24}]}{% endschema %}

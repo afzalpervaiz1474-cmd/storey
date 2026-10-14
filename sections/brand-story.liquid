@@ -1,0 +1,47 @@
+<section class="brand-story" data-motion-section>
+  <div class="container">
+    <div class="brand-story-intro" data-motion-heading>
+      <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h2>{{ section.settings.heading | escape }}</h2>
+      <div class="brand-story-lead">{{ section.settings.intro }}</div>
+    </div>
+    <div class="brand-story-grid" data-motion-grid>
+      {% for block in section.blocks %}
+        <article class="brand-story-item" data-motion-card {{ block.shopify_attributes }}>
+          <span class="brand-story-index">0{{ forloop.index }}</span>
+          <h3>{{ block.settings.heading | escape }}</h3>
+          <div>{{ block.settings.copy }}</div>
+        </article>
+      {% endfor %}
+    </div>
+    {% if section.settings.button_label != blank %}
+      <a class="brand-story-link" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }} <span aria-hidden="true">↗</span></a>
+    {% endif %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "The Verdant standard",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "A MORE CONSIDERED EVERYDAY" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Good choices feel good every day." },
+    { "type": "richtext", "id": "intro", "label": "Introduction", "default": "<p>From the first cup of coffee to the last detail before heading out, the things around us shape how a day feels. We bring together useful, thoughtful finds that make those everyday moments a little better.</p>" },
+    { "type": "text", "id": "button_label", "label": "Link label", "default": "Find your everyday essential" },
+    { "type": "url", "id": "button_link", "label": "Link" }
+  ],
+  "blocks": [
+    { "type": "principle", "name": "Store principle", "settings": [
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Useful by design" },
+      { "type": "richtext", "id": "copy", "label": "Description", "default": "<p>Everyday objects should earn their place. We look for practical details, comfortable use, and considered design that feels right at home.</p>" }
+    ] }
+  ],
+  "presets": [
+    { "name": "The Verdant standard", "blocks": [
+      { "type": "principle", "settings": { "heading": "Useful by design", "copy": "<p>Everyday objects should earn their place. We look for practical details, comfortable use, and considered design that feels right at home.</p>" } },
+      { "type": "principle", "settings": { "heading": "A little more personal", "copy": "<p>From a signature scent to the small things that make a room yours, the right detail can turn a routine into a ritual.</p>" } },
+      { "type": "principle", "settings": { "heading": "Made for real life", "copy": "<p>Useful, giftable, and easy to enjoy. Explore dependable everyday finds for getting ready, winding down, and everything between.</p>" } }
+    ] }
+  ]
+}
+{% endschema %}

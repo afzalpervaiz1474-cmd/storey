@@ -1,0 +1,40 @@
+{
+  "sections": {
+    "hero": { "type": "hero", "settings": {} },
+    "categories": {
+      "type": "category-grid",
+      "blocks": {
+        "him": { "type": "category", "settings": { "title": "For Him", "copy": "Everyday style, considered.", "link": "/collections/all" } },
+        "her": { "type": "category", "settings": { "title": "For Her", "copy": "Easy pieces. Lasting appeal.", "link": "/collections/all" } },
+        "beauty": { "type": "category", "settings": { "title": "Beauty & Care", "copy": "A better daily ritual.", "link": "/collections/all" } },
+        "home": { "type": "category", "settings": { "title": "Home & Kitchen", "copy": "Thoughtful things for home.", "link": "/collections/all" } }
+      },
+      "block_order": ["him", "her", "beauty", "home"],
+      "settings": {}
+    },
+    "orbit": {
+      "type": "orbit-gallery",
+      "blocks": {
+        "watch": { "type": "orbit_item", "settings": { "title": "Timeless details" } },
+        "fragrance": { "type": "orbit_item", "settings": { "title": "A signature scent" } },
+        "care": { "type": "orbit_item", "settings": { "title": "Daily care" } },
+        "home": { "type": "orbit_item", "settings": { "title": "Made for home" } }
+      },
+      "block_order": ["watch", "fragrance", "care", "home"],
+      "settings": {}
+    },
+    "featured": { "type": "featured-collection", "settings": {} },
+    "story": {
+      "type": "brand-story",
+      "blocks": {
+        "useful": { "type": "principle", "settings": { "heading": "Useful by design", "copy": "<p>Everyday objects should earn their place. We look for practical details, comfortable use, and considered design that feels right at home.</p>" } },
+        "personal": { "type": "principle", "settings": { "heading": "A little more personal", "copy": "<p>From a signature scent to the small things that make a room yours, the right detail can turn a routine into a ritual.</p>" } },
+        "real-life": { "type": "principle", "settings": { "heading": "Made for real life", "copy": "<p>Useful, giftable, and easy to enjoy. Explore dependable everyday finds for getting ready, winding down, and everything between.</p>" } }
+      },
+      "block_order": ["useful", "personal", "real-life"],
+      "settings": {}
+    },
+    "editorial": { "type": "editorial", "settings": {} }
+  },
+  "order": ["hero", "categories", "orbit", "featured", "story", "editorial"]
+}

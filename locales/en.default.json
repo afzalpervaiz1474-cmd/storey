@@ -1,0 +1,15 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Skip to content"
+    },
+    "search": {
+      "placeholder": "Search products",
+      "submit": "Search"
+    },
+    "cart": {
+      "title": "Your shopping bag",
+      "checkout": "Continue to checkout"
+    }
+  }
+}

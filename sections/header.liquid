@@ -1,0 +1,45 @@
+<div class="announcement">
+  {% if section.settings.announcement_link != blank %}<a href="{{ section.settings.announcement_link }}">{% endif %}
+  {{ section.settings.announcement | escape }}
+  {% if section.settings.announcement_link != blank %}</a>{% endif %}
+</div>
+<header class="store-header">
+  <div class="header-inner container">
+    <a class="brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
+      {% if section.settings.logo != blank %}
+        {{ section.settings.logo | image_url: width: 320 | image_tag: class: 'brand-logo', widths: '120, 180, 240, 320', alt: shop.name }}
+      {% else %}
+        <span>{{ section.settings.brand_name | default: shop.name | escape }}<span class="brand-dot">.</span></span>
+      {% endif %}
+    </a>
+    <nav class="desktop-nav" aria-label="Main menu">
+      {% if section.settings.menu != blank %}
+        {% for link in section.settings.menu.links %}<a href="{{ link.url }}">{{ link.title | escape }}</a>{% endfor %}
+      {% else %}
+        <a href="{{ routes.all_products_collection_url }}">Shop all</a><a href="{{ routes.collections_url }}">Collections</a><a href="{{ routes.search_url }}">Search</a>
+      {% endif %}
+    </nav>
+    <div class="header-actions">
+      <a class="icon-button" href="{{ routes.search_url }}" aria-label="Search">⌕</a>
+      <a class="icon-button bag-button" href="{{ routes.cart_url }}" aria-label="Shopping bag, {{ cart.item_count }} items"><span aria-hidden="true">♧</span><span class="bag-label">Bag</span><span class="bag-count" data-cart-count>{{ cart.item_count }}</span></a>
+      <details class="mobile-nav-toggle">
+        <summary class="icon-button" aria-label="Open menu">☰</summary>
+        <nav class="mobile-nav" aria-label="Mobile menu">
+          {% if section.settings.menu != blank %}{% for link in section.settings.menu.links %}<a href="{{ link.url }}">{{ link.title | escape }}</a>{% endfor %}{% else %}<a href="{{ routes.all_products_collection_url }}">Shop all</a><a href="{{ routes.collections_url }}">Collections</a><a href="{{ routes.search_url }}">Search</a>{% endif %}
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "text", "id": "announcement", "label": "Announcement", "default": "A little upgrade. A better everyday." },
+    { "type": "url", "id": "announcement_link", "label": "Announcement link" },
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "text", "id": "brand_name", "label": "Text logo", "default": "Verdant" },
+    { "type": "link_list", "id": "menu", "label": "Main menu", "default": "main-menu" }
+  ]
+}
+{% endschema %}

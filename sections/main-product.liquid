@@ -1,0 +1,20 @@
+<section class="container standard-page" data-motion-section>
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span>/</span>{% if collection %}<a href="{{ collection.url }}">{{ collection.title | escape }}</a><span>/</span>{% endif %}<span>{{ product.title | escape }}</span></nav>
+  <div class="detail-grid"><div class="product-gallery" data-motion-gallery>
+    {% for image in product.images %}<div class="detail-photo" data-motion-photo>{{ image | image_url: width: 1400 | image_tag: widths: '500, 800, 1100, 1400', sizes: '(min-width: 701px) 50vw, 100vw', loading: 'lazy', alt: image.alt | default: product.title }}</div>{% else %}<div class="detail-photo product-photo-placeholder">{{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>{% endfor %}
+  </div><div class="detail-info" data-motion-product-info><p class="eyebrow">{{ product.type | escape }}</p><h1>{{ product.title | escape }}</h1>
+    <p class="detail-price" data-product-price>{{ product.selected_or_first_available_variant.price | money }}</p>
+    {% if product.description != blank %}<div class="detail-description">{{ product.description }}</div>{% endif %}
+    {% form 'product', product, id: 'ProductForm' %}
+      {% unless product.has_only_default_variant %}<label class="field" for="VariantSelect">Options<select id="VariantSelect" name="id" data-variant-select>{% for variant in product.variants %}<option value="{{ variant.id }}" data-price="{{ variant.price | money | escape }}"{% if variant == product.selected_or_first_available_variant %} selected{% endif %}{% unless variant.available %} disabled{% endunless %}>{{ variant.title | escape }}{% unless variant.available %} — Sold out{% endunless %}</option>{% endfor %}</select></label>{% else %}<input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">{% endunless %}
+      <label class="field quantity-field" for="Quantity">Quantity<input id="Quantity" type="number" name="quantity" value="1" min="1" inputmode="numeric"></label>
+      <button class="button button-large button-full" type="submit" name="add"{% unless product.selected_or_first_available_variant.available %} disabled{% endunless %} data-add-button>{% if product.selected_or_first_available_variant.available %}Add to cart{% else %}Sold out{% endif %}</button>
+      <p class="form-status" data-product-status role="status" aria-live="polite"></p>
+      <a class="button button-secondary button-full" href="{{ routes.cart_url }}" data-view-cart hidden>View shopping bag</a>
+    {% endform %}
+    <div class="detail-perks"><span>◇ Secure checkout</span><span>↗ Delivery options at checkout</span></div>
+    <details open><summary>Product details</summary><div>{{ product.description }}</div></details>
+    <details><summary>Shipping & returns</summary><div>{{ shop.shipping_policy.body | default: 'Shipping options and charges are calculated at checkout.' }}</div></details>
+  </div></div>
+</section>
+{% schema %}{"name":"Product information","settings":[]}{% endschema %}

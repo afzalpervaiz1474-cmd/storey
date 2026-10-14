@@ -1,0 +1,11 @@
+<section class="container" data-motion-section><div class="editorial">
+  {% if section.settings.image != blank %}{{ section.settings.image | image_url: width: 1200 | image_tag: widths: '400, 700, 1000, 1200', sizes: '(min-width: 701px) 50vw, 100vw', loading: 'lazy', alt: section.settings.image.alt, class: 'editorial-image motion-parallax-image' }}{% else %}<img class="editorial-image motion-parallax-image" src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Thoughtfully arranged everyday beauty essentials" width="1200" height="1200" loading="lazy">{% endif %}
+  <div class="editorial-copy" data-motion-heading><p class="eyebrow">{{ section.settings.eyebrow | escape }}</p><h2>{{ section.settings.heading | escape }}</h2><div class="editorial-body">{{ section.settings.copy }}</div>{% if section.settings.button_label != blank %}<a class="button" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }} ↗</a>{% endif %}</div>
+</div></section>
+{% schema %}
+{
+  "name": "Editorial feature",
+  "settings": [{ "type": "image_picker", "id": "image", "label": "Image" }, { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "MAKE TIME FOR YOURSELF" }, { "type": "text", "id": "heading", "label": "Heading", "default": "Small rituals. Beautiful everyday." }, { "type": "richtext", "id": "copy", "label": "Text", "default": "<p>A fresh start, a signature scent, a moment of care. Find the essentials that make you feel like you.</p>" }, { "type": "text", "id": "button_label", "label": "Button label", "default": "Discover beauty & care" }, { "type": "url", "id": "button_link", "label": "Button link" }],
+  "presets": [{ "name": "Editorial feature" }]
+}
+{% endschema %}

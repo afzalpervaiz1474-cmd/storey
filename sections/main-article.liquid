@@ -1,0 +1,42 @@
+<article class="container standard-page article-page" data-motion-section>
+  <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="{{ routes.root_url }}">Home</a><span>/</span><a href="{{ blog.url }}">{{ blog.title | escape }}</a><span>/</span><span>{{ article.title | escape }}</span></nav>
+  <header class="article-header" data-motion-heading>
+    <p class="eyebrow">{{ blog.title | escape }}</p>
+    <h1 class="page-title">{{ article.title | escape }}</h1>
+    <p class="article-meta">{{ article.published_at | time_tag: format: 'date' }}{% if section.settings.show_author %} · {{ article.author | escape }}{% endif %}</p>
+  </header>
+  {% if article.image %}<div class="article-feature-image" data-motion-article-image>{{ article.image | image_url: width: 1800 | image_tag: widths: '600, 900, 1200, 1800', sizes: '(min-width: 900px) 900px, 100vw', fetchpriority: 'high', alt: article.image.alt | default: article.title }}</div>{% endif %}
+  <div class="article-content">{{ article.content }}</div>
+  {% if blog.comments_enabled? %}
+    <section class="article-comments">
+      <h2>{{ section.settings.comments_heading | escape }}</h2>
+      {% paginate article.comments by 10 %}
+        {% for comment in article.comments %}<article class="article-comment"><h3>{{ comment.author | escape }}</h3><p class="article-meta">{{ comment.created_at | time_tag: format: 'date' }}</p><div>{{ comment.content }}</div></article>{% endfor %}
+        {% if paginate.pages > 1 %}<nav class="pagination" aria-label="Comments pagination">{{ paginate | default_pagination }}</nav>{% endif %}
+      {% endpaginate %}
+      {% form 'new_comment', article %}
+        <h3>{{ section.settings.comment_form_heading | escape }}</h3>
+        {% if form.posted_successfully? %}<p class="contact-status" role="status">{{ section.settings.comment_success | escape }}</p>{% endif %}
+        {{ form.errors | default_errors }}
+        <div class="form-grid">
+          <label class="field" for="CommentAuthor">Name<input id="CommentAuthor" name="comment[author]" value="{{ form.author }}" autocomplete="name" required></label>
+          <label class="field" for="CommentEmail">Email<input id="CommentEmail" type="email" name="comment[email]" value="{{ form.email }}" autocomplete="email" required></label>
+          <label class="field field-full" for="CommentBody">Comment<textarea id="CommentBody" name="comment[body]" rows="5" required>{{ form.body }}</textarea></label>
+        </div>
+        <button class="button button-large" type="submit">{{ section.settings.comment_submit | escape }}</button>
+      {% endform %}
+    </section>
+  {% endif %}
+</article>
+{% schema %}
+{
+  "name": "Article",
+  "settings": [
+    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": true },
+    { "type": "text", "id": "comments_heading", "label": "Comments heading", "default": "Comments" },
+    { "type": "text", "id": "comment_form_heading", "label": "Comment form heading", "default": "Leave a comment" },
+    { "type": "text", "id": "comment_success", "label": "Success message", "default": "Your comment was submitted." },
+    { "type": "text", "id": "comment_submit", "label": "Submit label", "default": "Post comment" }
+  ]
+}
+{% endschema %}

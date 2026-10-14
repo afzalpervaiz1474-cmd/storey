@@ -1,0 +1,13 @@
+<section class="container standard-page" data-motion-section><p class="eyebrow">YOUR EVERYDAY EDIT</p><h1 class="page-title" data-motion-heading>Your shopping bag.</h1>
+  {% if cart.item_count == 0 %}<div class="empty-state"><h2>Your shopping bag is empty.</h2><a class="button" href="{{ routes.all_products_collection_url }}">Explore the collection →</a></div>
+  {% else %}<form action="{{ routes.cart_url }}" method="post" novalidate>
+    <div class="cart-lines" data-motion-grid>{% for item in cart.items %}<div class="cart-line" data-motion-card>
+      {% if item.image %}<a href="{{ item.url }}">{{ item.image | image_url: width: 240 | image_tag: widths: '100, 160, 240', loading: 'lazy', alt: item.image.alt | default: item.product.title }}</a>{% endif %}
+      <div class="cart-item-info"><a href="{{ item.url }}">{{ item.product.title | escape }}</a>{% unless item.variant.title == 'Default Title' %}<p>{{ item.variant.title | escape }}</p>{% endunless %}<p>{{ item.final_price | money }}</p>
+        <label class="field" for="Updates_{{ item.key }}">Quantity<input id="Updates_{{ item.key }}" type="number" name="updates[]" value="{{ item.quantity }}" min="0" inputmode="numeric"></label><a class="remove-link" href="{{ item.url_to_remove }}">Remove</a>
+      </div><strong>{{ item.final_line_price | money }}</strong>
+    </div>{% endfor %}</div>
+    <div class="cart-total" data-motion-panel><button class="button button-secondary" type="submit" name="update">Update cart</button><p>Delivery and taxes calculated at checkout.</p><div class="cart-total-row"><strong>Subtotal</strong><strong>{{ cart.total_price | money }}</strong></div><button class="button button-large" type="submit" name="checkout">Continue to checkout →</button></div>
+  </form>{% endif %}
+</section>
+{% schema %}{"name":"Cart","settings":[]}{% endschema %}

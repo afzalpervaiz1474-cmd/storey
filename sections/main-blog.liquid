@@ -1,0 +1,41 @@
+<section class="container catalog" data-motion-section>
+  <div class="section-heading">
+    <div data-motion-heading>
+      <p class="eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      <h1>{{ blog.title | escape }}</h1>
+      {% if blog.description != blank %}<div class="section-copy">{{ blog.description }}</div>{% endif %}
+    </div>
+  </div>
+  {% paginate blog.articles by section.settings.articles_per_page %}
+    <div class="article-grid" data-motion-grid>
+      {% for article in blog.articles %}
+        <article class="article-card" data-motion-card>
+          <a class="article-image" href="{{ article.url }}">
+            {% if article.image %}{{ article.image | image_url: width: 900 | image_tag: widths: '360, 540, 720, 900', sizes: '(min-width: 701px) 33vw, 100vw', loading: 'lazy', alt: article.image.alt | default: article.title }}{% endif %}
+          </a>
+          <div class="article-card-copy">
+            <p class="article-meta">{{ article.published_at | time_tag: format: 'date' }}{% if section.settings.show_author %} · {{ article.author | escape }}{% endif %}</p>
+            <h2><a href="{{ article.url }}">{{ article.title | escape }}</a></h2>
+            <p>{{ article.excerpt_or_content | strip_html | truncatewords: 28 }}</p>
+            <a class="section-link" href="{{ article.url }}">{{ section.settings.read_more | escape }} →</a>
+          </div>
+        </article>
+      {% else %}
+        <p>{{ section.settings.empty_text | escape }}</p>
+      {% endfor %}
+    </div>
+    {% if paginate.pages > 1 %}<nav class="pagination" aria-label="Blog pagination">{{ paginate | default_pagination }}</nav>{% endif %}
+  {% endpaginate %}
+</section>
+{% schema %}
+{
+  "name": "Blog articles",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "THE VERDANT JOURNAL" },
+    { "type": "range", "id": "articles_per_page", "label": "Articles per page", "min": 4, "max": 16, "step": 4, "default": 8 },
+    { "type": "checkbox", "id": "show_author", "label": "Show author", "default": false },
+    { "type": "text", "id": "read_more", "label": "Read more label", "default": "Read article" },
+    { "type": "text", "id": "empty_text", "label": "Empty blog message", "default": "There are no articles here yet." }
+  ]
+}
+{% endschema %}
